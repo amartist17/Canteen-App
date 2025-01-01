@@ -1,0 +1,38 @@
+{
+  "name": "canteen-management-app-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "canteen-management-app-backend": "file:",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-buffer": "^4.1.0",
+    "escpos-buffer-image": "^1.1.0",
+    "escpos-usb": "^3.0.0-alpha.4",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "libusb": "^0.0.0-pre",
+    "mongoose": "^8.9.2",
+    "node-thermal-printer": "^4.4.3",
+    "nodemon": "^3.1.9",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "usb": "^2.14.0",
+    "xss-clean": "^0.1.4"
+  }
+}

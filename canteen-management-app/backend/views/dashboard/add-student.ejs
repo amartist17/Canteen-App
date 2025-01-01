@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <!--  Title -->
+    <title>Mordenize</title>
+    <!--  Required Meta Tag -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="handheldfriendly" content="true" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="description" content="Mordenize" />
+    <meta name="author" content="" />
+    <meta name="keywords" content="Mordenize" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--  Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/images/logos/favicon.png" />
+    <!-- Owl Carousel  -->
+    <link rel="stylesheet" href="/libs/owl.carousel/dist/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="/libs/prismjs/themes/prism.min.css">
+    <!-- Core Css -->
+    <link  id="themeColors"  rel="stylesheet" href="/css/style.min.css" />
+    <style>
+        .bg-info-subtle{
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            height: 39px !important;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Preloader -->
+    <div class="preloader">
+      <img src="/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+    </div>
+    <!-- Preloader -->
+    <div class="preloader">
+      <img src="/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+    </div>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme"  data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+      
+      
+      <%- include('./ui/sidenav') %>
+      
+      
+      <!--  Main wrapper -->
+      <div class="body-wrapper">
+        
+        <%- include('./ui/header') %>
+        <div class="container-fluid">
+          <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex justify-content-center">
+            <div class="d-flex justify-content-center w-100">
+              <div class="row justify-content-center w-100">
+                <div class="col-md-12 col-lg-10 col-xxl-5">
+                  <div class="card mb-0 mt-8">
+                    <div class="card-body">
+                      <a href="/dashboard" class="text-nowrap logo-img text-center d-block mb-5 w-100">
+                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg" width="180" alt="">
+                      </a>
+                      <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Add Student</h2>
+                      <form id="deductForm">
+                      
+                      
+                        <!-- Amount Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-receipt-2 fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="number" 
+                            name="amount" 
+                            class="form-control" 
+                            placeholder="Enter Amount" 
+                            aria-label="Amount" 
+                            required 
+                          />
+                        </div>
+                      
+                        <!-- Description Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-pencil fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="text" 
+                            name="description" 
+                            class="form-control" 
+                            placeholder="Enter Description" 
+                            aria-label="Description" 
+                          />
+                        </div>
+
+                          <!-- RFID Field -->
+                          <div class="input-group mb-3 mt-3">
+                            <div class="input-group-prepend">
+                              <button class="btn bg-info-subtle text-info" type="button">
+                                <i class="ti ti-id-badge-2 fs-4"></i>
+                              </button>
+                            </div>
+                            <input 
+                              type="text" 
+                              name="rfidCard" 
+                              class="form-control" 
+                              placeholder="Enter RFID" 
+                              aria-label="RFID" 
+                              required 
+                            />
+                          </div>
+                      
+                        <!-- Hidden Input for Type -->
+                        <input type="hidden" name="type" value="deduction" />
+                      
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2 mt-3">Deduct Amount</button>
+                      
+                        <!-- Alerts -->
+                        <div id="DeductAlert"></div>
+                      </form>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+   
+<%- include('./ui/footer') %>
