@@ -59,68 +59,100 @@
                         <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg" width="180" alt="">
                       </a>
                       <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Add Student</h2>
-                      <form id="deductForm">
-                      
-                      
-                        <!-- Amount Field -->
-                        <div class="input-group mb-3 mt-3">
+                      <form id="addStudentForm">
+
+                         <!-- Student Name Field -->
+                         <div class="input-group mb-3 mt-3">
                           <div class="input-group-prepend">
                             <button class="btn bg-info-subtle text-info" type="button">
-                              <i class="ti ti-receipt-2 fs-4"></i>
+                              <i class="ti ti-user fs-4"></i>
                             </button>
                           </div>
                           <input 
-                            type="number" 
-                            name="amount" 
-                            class="form-control" 
-                            placeholder="Enter Amount" 
-                            aria-label="Amount" 
-                            required 
-                          />
+                          type="text" 
+                          name="studentId" 
+                          class="form-control" 
+                          placeholder="Enter Student Id" 
+                          aria-label="studentId" 
+                          required 
+                        />
                         </div>
-                      
-                        <!-- Description Field -->
+
+                        <!-- Student Name Field -->
                         <div class="input-group mb-3 mt-3">
                           <div class="input-group-prepend">
                             <button class="btn bg-info-subtle text-info" type="button">
-                              <i class="ti ti-pencil fs-4"></i>
+                              <i class="ti ti-user fs-4"></i>
                             </button>
                           </div>
                           <input 
                             type="text" 
-                            name="description" 
+                            name="name" 
                             class="form-control" 
-                            placeholder="Enter Description" 
-                            aria-label="Description" 
+                            placeholder="Enter Student Name" 
+                            aria-label="Name" 
+                            required 
                           />
                         </div>
-
-                          <!-- RFID Field -->
-                          <div class="input-group mb-3 mt-3">
-                            <div class="input-group-prepend">
-                              <button class="btn bg-info-subtle text-info" type="button">
-                                <i class="ti ti-id-badge-2 fs-4"></i>
-                              </button>
-                            </div>
-                            <input 
-                              type="text" 
-                              name="rfidCard" 
-                              class="form-control" 
-                              placeholder="Enter RFID" 
-                              aria-label="RFID" 
-                              required 
-                            />
-                          </div>
                       
-                        <!-- Hidden Input for Type -->
-                        <input type="hidden" name="type" value="deduction" />
+                        <!-- Email Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-mail fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="email" 
+                            name="email" 
+                            class="form-control" 
+                            placeholder="Enter Email" 
+                            aria-label="Email" 
+                            required 
+                          />
+                        </div>
+                      
+                        <!-- Phone Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-phone fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="text" 
+                            name="phone" 
+                            class="form-control" 
+                            placeholder="Enter Phone Number" 
+                            aria-label="Phone" 
+                            required 
+                          />
+                        </div>
+                      
+                        <!-- RFID Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-id-badge-2 fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="text" 
+                            name="rfidCard" 
+                            class="form-control" 
+                            placeholder="Enter RFID" 
+                            aria-label="RFID" 
+                            required 
+                          />
+                        </div>
                       
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2 mt-3">Deduct Amount</button>
+                        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2 mt-3">Add Student</button>
                       
                         <!-- Alerts -->
-                        <div id="DeductAlert"></div>
+                        <div id="AddStudentAlert"></div>
                       </form>
+                      
                       
                     </div>
                   </div>

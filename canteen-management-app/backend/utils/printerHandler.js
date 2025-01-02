@@ -76,11 +76,11 @@ async function printReceipt(bodyContent) {
 }
 
 // Helper function to print the header
-async function printHeader(printer) {
-  if (logoPath) {
+async function printHeader(printer,newLogo) {
+
     try {
       const imageManager = new ImageManager();
-      const imageData = await imageManager.loadImage(logoPath);
+      const imageData = await imageManager.loadImage(newLogo||logoPath);
       const logo = new Image(imageData);
       await printer.draw(logo);
     } catch (error) {
@@ -90,7 +90,7 @@ async function printHeader(printer) {
   await printer.writeln('*** Receipt ***', { align: Align.Center, bold: true });
   await printer.writeln(`Date: ${new Date().toLocaleString()}`, { align: Align.Left });
   await printer.writeln('------------------------------------------------', { align: Align.Center });
-}
+
 
 // Helper function to print the footer
 async function printFooter(printer) {
@@ -122,6 +122,7 @@ async function printDeductionReceipt(rfidCard,name, amount, balance) {
 
 // Function to print a meal receipt
 async function printMealReceipt(rfidCard, planName, mealType,mealsLeft, expiryDate) {
+  
   const bodyContent = `
     RFID: ${rfidCard}
     Plan: ${planName}
@@ -129,6 +130,14 @@ async function printMealReceipt(rfidCard, planName, mealType,mealsLeft, expiryDa
     Meals Left: ${mealsLeft}
     Plan Expiry: ${expiryDate.toLocaleDateString()}
   `;
+  if(planName==='80 Thali'){
+    
+    await printReceipt(bodyContent,'/static/test/eighty.jpg');
+  }
+  if(planName==='100 Thali'){
+    
+    await printReceipt(bodyContent,'/static/test/hundred.jpg');
+  }
   await printReceipt(bodyContent);
 }
 

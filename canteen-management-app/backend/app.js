@@ -39,7 +39,7 @@ app.use(limiter);
 app.use('/students', require('./routes/studentRoutes'));
 app.use('/plans', require('./routes/planRoutes'));
 app.use('/transactions', require('./routes/transactionRoutes'));
-app.use('/', require('./routes/viewsRoutes'));
+app.use('/dashboard', require('./routes/viewsRoutes'));
 
 // Error handling middleware
 const { errorHandler } = require('./utils/errorHandler');

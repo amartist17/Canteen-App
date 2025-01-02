@@ -1,9 +1,10 @@
 const express = require('express');
+const PredefinedPlans = require('../models/PredefinedPlans');
 const router = express.Router();
 // const { testPrint, printReceipt, printReceiptWithLogo } = require('../utils/printerHandler');
 
 // Dashboard Home
-router.get('/dashboard', (req, res, next) => {
+router.get('/', (req, res, next) => {
   try {
 
     res.render('dashboard/dashboard-home');
@@ -50,9 +51,11 @@ router.get('/transactions/purchase', (req, res, next) => {
 });
 
 // Buy Plan
-router.get('/transactions/buy-plan', (req, res, next) => {
+router.get('/transactions/buy-plan',async (req, res, next) => {
   try {
-    res.render('dashboard/buy-plan');
+    let plans = await PredefinedPlans.find();
+
+    res.render('dashboard/buy-plan',{plans});
   } catch (err) {
     next(err);
   }

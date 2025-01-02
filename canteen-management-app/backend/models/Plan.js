@@ -51,6 +51,12 @@ const PlanSchema = new mongoose.Schema({
     ref: 'PredefinedPlan', // Reference to the predefined plan template
     required: true,
   },
+  mode: {
+    type: String,
+    enum: ['cash', 'online'],
+    default: 'online',
+    required: true,
+  },
 }, { timestamps: true });
 
 // Determines the current meal based on the time

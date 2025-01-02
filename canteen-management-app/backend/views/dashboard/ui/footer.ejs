@@ -299,6 +299,53 @@
       });
     </script>
     
+    <!-- Add Student -->
+     <script>
+      $(document).ready(function () {
+  $('#addStudentForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const formData = $(this).serialize(); // Serialize form data
+
+    $.ajax({
+      url: '/students/', // Update with your API endpoint
+      type: 'POST',
+      data: formData,
+      success: function (response) {
+        // Display success alert
+        $('#AddStudentAlert').html(`
+          <div class="alert alert-success" role="alert">
+            Student added successfully!
+          </div>
+        `);
+
+        // Clear the form
+        $('#addStudentForm')[0].reset();
+
+        // Auto-hide alert after 3 seconds
+        setTimeout(() => {
+          $('#AddStudentAlert').html('');
+        }, 3000);
+      },
+      error: function (xhr) {
+        // Display error alert
+        const errorMessage = xhr.responseJSON?.message || 'An error occurred';
+        $('#AddStudentAlert').html(`
+          <div class="alert alert-danger" role="alert">
+            ${errorMessage}
+          </div>
+        `);
+
+        // Auto-hide alert after 3 seconds
+        setTimeout(() => {
+          $('#AddStudentAlert').html('');
+        }, 3000);
+      },
+    });
+  });
+});
+
+     </script>
   </body>
 
 </html>
