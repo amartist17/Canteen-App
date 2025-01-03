@@ -26,7 +26,7 @@ function connectToPrinter() {
 }
 
 // Main function to print a receipt
-async function printReceipt(bodyContent) {
+async function printReceipt(bodyContent, newLogo) {
   const { device, outEndpoint } = connectToPrinter();
 
   try {
@@ -43,7 +43,7 @@ async function printReceipt(bodyContent) {
       bold: true,
     }, async () => {
       // Print header
-      await printHeader(printer);
+      await printHeader(printer, newLogo);
 
       // Print dynamic body content
       await printer.writeln(bodyContent);
@@ -86,10 +86,10 @@ async function printHeader(printer,newLogo) {
     } catch (error) {
       console.error('Error loading logo:', error);
     }
+    await printer.writeln('*** Receipt ***', { align: Align.Center, bold: true });
+    await printer.writeln(`Date: ${new Date().toLocaleString()}`, { align: Align.Left });
+    await printer.writeln('------------------------------------------------', { align: Align.Center });
   }
-  await printer.writeln('*** Receipt ***', { align: Align.Center, bold: true });
-  await printer.writeln(`Date: ${new Date().toLocaleString()}`, { align: Align.Left });
-  await printer.writeln('------------------------------------------------', { align: Align.Center });
 
 
 // Helper function to print the footer
@@ -121,7 +121,7 @@ async function printDeductionReceipt(rfidCard,name, amount, balance) {
 }
 
 // Function to print a meal receipt
-async function printMealReceipt(rfidCard, planName, mealType,mealsLeft, expiryDate) {
+async function printMealReceipt(rfidCard, planName, mealType,mealsLeft, expiryDate, thaliType) {
   
   const bodyContent = `
     RFID: ${rfidCard}
@@ -130,15 +130,18 @@ async function printMealReceipt(rfidCard, planName, mealType,mealsLeft, expiryDa
     Meals Left: ${mealsLeft}
     Plan Expiry: ${expiryDate.toLocaleDateString()}
   `;
-  if(planName==='80 Thali'){
+  console.log(thaliType);
+  if(thaliType==80){
     
-    await printReceipt(bodyContent,'/static/test/eighty.jpg');
+    await printReceipt(bodyContent,'static/test/eighty.png');
   }
-  if(planName==='100 Thali'){
+  else if(thaliType==100){
     
-    await printReceipt(bodyContent,'/static/test/hundred.jpg');
+    await printReceipt(bodyContent,'static/test/hundred.png');
+  }else{
+
+    await printReceipt(bodyContent);
   }
-  await printReceipt(bodyContent);
 }
 
 // Function to test the printer

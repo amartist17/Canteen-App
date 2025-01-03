@@ -23,6 +23,12 @@ const PredefinedPlanSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  thaliType: {
+    type: String,
+    enum: [80, 100],
+    required: true,
+    default: 80,
+  },
   mealDetails: {
     type: mongoose.Schema.Types.Mixed, // Details vary based on planType
     required: true,

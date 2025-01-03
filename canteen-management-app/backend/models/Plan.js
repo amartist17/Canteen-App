@@ -23,6 +23,12 @@ const PlanSchema = new mongoose.Schema({
     enum: ['fixed', 'flexible'],
     required: true,
   },
+  thaliType: {
+    type: String,
+    enum: [80, 100],
+    required: true,
+    default: 80,
+  },
   duration: {
     type: Number, // Duration in days
     required: true,
@@ -84,6 +90,7 @@ PlanSchema.statics.generateAndAssignPlan = async function (student, predefinedPl
     student: student._id,
     planName: predefinedPlan.planName,
     planType: predefinedPlan.planType,
+    thaliType: predefinedPlan.thaliType,
     duration: predefinedPlan.duration,
     startDate: startDate || new Date(),
     endDate: new Date(Date.now() + predefinedPlan.duration * 24 * 60 * 60 * 1000),
@@ -138,7 +145,7 @@ PlanSchema.methods.deductFlexibleMeal = async function (student, currentMeal) {
   this.markModified('mealDetails');
   this.markModified('mealUsage');
   await this.save();
-  printMealReceipt(student.rfidCard, this.planName, currentMeal, this.mealDetails.totalMeals, this.endDate)
+  printMealReceipt(student.rfidCard, this.planName, currentMeal, this.mealDetails.totalMeals, this.endDate, this.thaliType)
 
   return { mealType: currentMeal, remainingMeals: this.mealDetails.totalMeals, message: `${currentMeal} meal deducted successfully` };
 };
