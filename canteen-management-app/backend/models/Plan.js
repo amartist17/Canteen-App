@@ -69,8 +69,8 @@ const PlanSchema = new mongoose.Schema({
 PlanSchema.methods.getCurrentMeal = function () {
   const mealTimes = {
     breakfast: { start: '07:00', end: '11:00' },
-    lunch: { start: '11:00', end: '24:00' },
-    dinner: { start: '00:00', end: '06:00' },
+    lunch: { start: '11:00', end: '15:00' },
+    dinner: { start: '18:30', end: '21:30' },
   };
 
   const now = new Date();
