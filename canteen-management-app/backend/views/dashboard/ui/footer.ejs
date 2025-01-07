@@ -346,6 +346,51 @@
 });
 
      </script>
+
+     <!-- Add Plan -->
+      <script>
+        $(document).ready(function () {
+  $('#planForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const formData = $(this).serialize(); // Serialize form data
+
+    $.ajax({
+      url: '/transactions', // Replace with your backend endpoint
+      type: 'POST',
+      data: formData,
+      success: function (response) {
+        // Handle success
+        $('#PlanAlert').html(`
+          <div class="alert alert-success" role="alert">
+            Plan assigned successfully!
+          </div>
+        `);
+
+        setTimeout(() => {
+          $('#PlanAlert').empty(); // Remove the alert after 3 seconds
+        }, 3000);
+
+        $('#planForm')[0].reset(); // Clear the form
+      },
+      error: function (xhr) {
+        // Handle error
+        const errorMessage = xhr.responseJSON?.message || 'An error occurred';
+        $('#PlanAlert').html(`
+          <div class="alert alert-danger" role="alert">
+            Error: ${errorMessage}
+          </div>
+        `);
+
+        setTimeout(() => {
+          $('#PlanAlert').empty(); // Remove the alert after 3 seconds
+        }, 3000);
+      },
+    });
+  });
+});
+
+      </script>
   </body>
 
 </html>

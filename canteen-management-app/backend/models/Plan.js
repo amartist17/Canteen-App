@@ -130,7 +130,7 @@ PlanSchema.methods.deductFixedMeal = async function (student, currentMeal) {
   this.markModified('mealDetails');
   this.markModified('mealUsage');
   await this.save();
-  printMealReceipt(student.rfidCard, this.planName, currentMeal,0, this.endDate)
+  printMealReceipt(student.rfidCard, this.planName, currentMeal,0, this.endDate,  this.thaliType)
   return { mealType: currentMeal, remainingMeals: meal.totalMeals, message: `${currentMeal} meal deducted successfully` };
 };
 
