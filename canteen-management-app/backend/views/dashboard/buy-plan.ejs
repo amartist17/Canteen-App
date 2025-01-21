@@ -100,14 +100,14 @@
                             </button>
                           </div>
                           <select 
-                            name="predefinedPlanId" 
+                            name="definedPlanId" 
                             class="form-select mr-sm-2" 
                             id="planSelect" 
                             required
                           >
                             <option selected disabled>Choose Plan...</option>
                             <% plans.forEach(plan => { %>
-                              <option value="<%= plan.predefinedPlanId %>">
+                              <option value="<%= plan.definedPlanId %>">
                                 <%= plan.planName %> @ ₹<%= plan.price %>
                               </option>
                             <% }) %>
@@ -137,6 +137,7 @@
                           />
                           <label class="form-check-label" for="inlineRadio2">Online</label>
                         </div>
+                        <input type="hidden" name="type" value="plan-update" />
                       
                         <!-- Submit Button -->
                         <button 

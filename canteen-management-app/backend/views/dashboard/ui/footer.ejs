@@ -354,7 +354,7 @@
     e.preventDefault(); // Prevent default form submission
 
     const formData = $(this).serialize(); // Serialize form data
-
+    console.log(formData); // Debugging purposes
     $.ajax({
       url: '/transactions', // Replace with your backend endpoint
       type: 'POST',
