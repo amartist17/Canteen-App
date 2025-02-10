@@ -37,8 +37,10 @@ app.use(limiter);
 
 // Routes
 app.use('/students', require('./routes/studentRoutes'));
+// app.use('/staff', require('./routes/staffRoutes'));
 app.use('/plans', require('./routes/planRoutes'));
 app.use('/transactions', require('./routes/transactionRoutes'));
+app.use('/ledger', require('./routes/ledgerRoutes'));
 app.use('/dashboard', require('./routes/viewsRoutes'));
 
 // Error handling middleware

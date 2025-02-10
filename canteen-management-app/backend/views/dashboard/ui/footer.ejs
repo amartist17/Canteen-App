@@ -131,6 +131,9 @@
     <script src="/libs/apexcharts/dist/apexcharts.min.js"></script>
     <script src="/js/dashboard.js"></script>
 
+    <script src="/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/js/datatable/datatable-basic.init.js"></script>
+
     <!-- recharge -->
     <script>
       $(document).ready(function () {
@@ -389,8 +392,62 @@
     });
   });
 });
-
       </script>
+<script>
+  $(document).ready(function () {
+    $('#addLedgerForm').on('submit', function (e) {
+      e.preventDefault(); // Prevent default form submission
+
+      // Get form data and manually calculate 'Online'
+      const formData = $(this).serializeArray();
+      let online1 = parseFloat($('input[name="online1"]').val()) || 0;
+      let online2 = parseFloat($('input[name="online2"]').val()) || 0;
+      let online = online1 + online2;
+
+      // Add 'Online' field to form data
+      formData.push({ name: 'online', value: online });
+
+      $.ajax({
+        url: '/ledger/entry', // Update with your API endpoint
+        type: 'POST',
+        data: $.param(formData), // Convert form array to query string
+        success: function (response) {
+          // Display success alert
+          $('#AddLedgerAlert').html(`
+            <div class="alert alert-success" role="alert">
+              Ledger entry added successfully!
+            </div>
+          `);
+
+          // Clear the form
+          $('#addLedgerForm')[0].reset();
+
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            $('#AddLedgerAlert').html('');
+          }, 3000);
+        },
+        error: function (xhr) {
+          // Display error alert
+          const errorMessage = xhr.responseJSON?.message || 'An error occurred';
+          $('#AddLedgerAlert').html(`
+            <div class="alert alert-danger" role="alert">
+              ${errorMessage}
+            </div>
+          `);
+
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            $('#AddLedgerAlert').html('');
+          }, 3000);
+        },
+      });
+    });
+  });
+ 
+</script>
+
+      
   </body>
 
 </html>

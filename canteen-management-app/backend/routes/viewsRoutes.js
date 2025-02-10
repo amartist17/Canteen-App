@@ -1,5 +1,6 @@
 const express = require('express');
 const PredefinedPlans = require('../models/PredefinedPlans');
+const Ledger = require('../models/Ledger');
 const router = express.Router();
 // const { testPrint, printReceipt, printReceiptWithLogo } = require('../utils/printerHandler');
 
@@ -14,9 +15,10 @@ router.get('/', (req, res, next) => {
 });
 
 // Daily Ledger
-router.get('/daily-ledger', (req, res, next) => {
+router.get('/daily-ledger', async(req, res, next) => {
   try {
-    res.render('dashboard/daily-ledger');
+    let ledger = await Ledger.find();
+    res.render('dashboard/daily-ledger',{ledger});
   } catch (err) {
     next(err);
   }
@@ -61,7 +63,7 @@ router.get('/transactions/buy-plan',async (req, res, next) => {
   }
 });
 
-// Buy Plan
+// Add Student
 router.get('/students/add-student', (req, res, next) => {
   try {
     res.render('dashboard/add-student');
@@ -70,6 +72,23 @@ router.get('/students/add-student', (req, res, next) => {
   }
 });
 
+// Add Staff
+router.get('/add-staff', (req, res, next) => {
+  try {
+    res.render('dashboard/add-staff');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Add Staff
+router.get('/contacts', (req, res, next) => {
+  try {
+    res.render('dashboard/contacts');
+  } catch (err) {
+    next(err);
+  }
+});
 
 
 module.exports = router;
