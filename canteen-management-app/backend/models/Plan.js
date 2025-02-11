@@ -115,6 +115,7 @@ PlanSchema.methods.deductMeal = async function (student) {
 // Deducts a fixed meal
 PlanSchema.methods.deductFixedMeal = async function (student, currentMeal) {
   const today = new Date().toISOString().split('T')[0];
+  if (new Date(this.endDate) < new Date()) throw new AppError(`Plan Expired`, 400);
 
   if (this.mealUsage.some((usage) => usage.mealType === currentMeal && usage.date.toISOString().split('T')[0] === today)) {
     return { message: `${currentMeal} meal already used today` };
