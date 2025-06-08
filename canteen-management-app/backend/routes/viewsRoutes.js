@@ -18,6 +18,8 @@ router.get('/', (req, res, next) => {
 router.get('/daily-ledger', async(req, res, next) => {
   try {
     let ledger = await Ledger.find();
+    // ledger= ledger.reverse()
+    // console.log(ledger)
     res.render('dashboard/daily-ledger',{ledger});
   } catch (err) {
     next(err);

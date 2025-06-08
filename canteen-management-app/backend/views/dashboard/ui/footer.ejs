@@ -393,8 +393,15 @@
   });
 });
       </script>
+
+
+
 <script>
   $(document).ready(function () {
+
+    new DataTable('#zero_config', {
+    order: [[1, 'desc']]
+});
     $('#addLedgerForm').on('submit', function (e) {
       e.preventDefault(); // Prevent default form submission
 

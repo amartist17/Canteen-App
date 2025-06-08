@@ -56,26 +56,11 @@
                   <div class="card mb-0 mt-8">
                     <div class="card-body">
                       <a href="/dashboard" class="text-nowrap logo-img text-center d-block mb-5 w-100">
-                        <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/logos/dark-logo.svg" width="180" alt="">
+                        <img src="/images/logos/pblogo.png" width="180" alt="">
                       </a>
                       <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Plan Purchase</h2>
                       <form id="planForm">
-                        <!-- RFID Field -->
-                        <div class="input-group mb-3 mt-3">
-                          <div class="input-group-prepend">
-                            <button class="btn bg-info-subtle text-info" type="button">
-                              <i class="ti ti-id-badge-2 fs-4"></i>
-                            </button>
-                          </div>
-                          <input 
-                            type="text" 
-                            name="rfidCard" 
-                            class="form-control" 
-                            placeholder="RFID" 
-                            aria-label="RFID" 
-                            required
-                          />
-                        </div>
+                       
                       
                         <!-- Start Date Field -->
                         <div class="input-group mb-3 mt-3">
@@ -138,7 +123,22 @@
                           <label class="form-check-label" for="inlineRadio2">Online</label>
                         </div>
                         <input type="hidden" name="type" value="plan-update" />
-                      
+                         <!-- RFID Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-id-badge-2 fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="text" 
+                            name="rfidCard" 
+                            class="form-control" 
+                            placeholder="RFID" 
+                            aria-label="RFID" 
+                            required
+                          />
+                        </div>
                         <!-- Submit Button -->
                         <button 
                           type="submit" 
