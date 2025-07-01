@@ -17,7 +17,7 @@
     <link rel="shortcut icon" type="image/png" href="/images/logos/favicon.png" />
     <!-- Owl Carousel  -->
     <link rel="stylesheet" href="/libs/owl.carousel/dist/assets/owl.carousel.min.css">
-    
+    <link rel="stylesheet" href="/libs/prismjs/themes/prism.min.css">
     <!-- Core Css -->
     <link  id="themeColors"  rel="stylesheet" href="/css/style.min.css" />
     <style>
@@ -58,38 +58,58 @@
                       <a href="/dashboard" class="text-nowrap logo-img text-center d-block mb-5 w-100">
                         <img src="/images/logos/pblogo.png" width="180" alt="">
                       </a>
-                      <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Package Meal Deduction</h2>
-                      <form id="takeMealForm">
-                        <!-- RFID Field -->
-                        <div class="input-group mb-3 mt-3">
-                          <div class="input-group-prepend">
-                            <button class="btn bg-info-subtle text-info" type="button">
-                              <i class="ti ti-id-badge-2 fs-4"></i>
-                            </button>
-                          </div>
-                          <input 
-                            type="text" 
-                            name="rfidCard" 
-                            class="form-control" 
-                            placeholder="Enter RFID" 
-                            aria-label="RFID" 
-                            required 
-                            autocomplete="off"
-                            autofocus
-                          />
-                        </div>
+                      <div id="RFIDUpdateAlert"></div>
+                      <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Update Student Draft</h2>
+                      <form id="updateRFIDForm" action="/students/update-rfid" method="POST" enctype="application/x-www-form-urlencoded">
+  
+  <!-- Old RFID Field -->
+  <div class="input-group mb-3 mt-3">
+    <div class="input-group-prepend">
+      <button class="btn bg-warning-subtle text-warning" type="button">
+        <i class="ti ti-id-badge fs-4"></i>
+      </button>
+    </div>
+    <input 
+      type="text" 
+      name="oldRFID" 
+      class="form-control" 
+      placeholder="Old RFID" 
+      aria-label="Old RFID" 
+      required
+    >
+  </div>
+
+  <!-- New RFID Field -->
+  <div class="input-group mb-3 mt-3">
+    <div class="input-group-prepend">
+      <button class="btn bg-success-subtle text-success" type="button">
+        <i class="ti ti-id-badge fs-4"></i>
+      </button>
+    </div>
+    <input 
+      type="text" 
+      name="newRFID" 
+      class="form-control" 
+      placeholder="New RFID" 
+      aria-label="New RFID" 
+      required
+    >
+  </div>
+
+  <!-- Hidden Info (Optional) -->
+  <input type="text" name="type" value="rfid-update" hidden>
+  <input type="text" name="description" value="RFID card changed" hidden>
+
+  <!-- Submit Button -->
+  <button 
+    type="submit" 
+    class="btn btn-primary w-100 py-8 mb-4 rounded-2 mt-3"
+  >
+    Update RFID
+  </button>
+</form>
+
                       
-                        
-                      
-                        <!-- Hidden Input for Type -->
-                        <input type="hidden" name="type" value="meal-deduction" />
-                      
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Deduct Meal</button>
-                      
-                        <!-- Alerts -->
-                        <div id="TakeMealAlert"></div>
-                      </form>
                       
                     </div>
                   </div>

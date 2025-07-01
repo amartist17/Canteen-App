@@ -94,10 +94,39 @@ router.get('/students/total-students',async (req, res, next) => {
   }
 });
 
+// Update Student
+router.get('/students/update-student', (req, res, next) => {
+  try {
+    res.render('dashboard/update-student');
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+
 // Add Staff
 router.get('/contacts', (req, res, next) => {
   try {
     res.render('dashboard/contacts');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Add printer
+router.get('/printer', (req, res, next) => {
+  try {
+    const { listAllUsbDevices, listUsbPrinters } = require('../utils/printerFinder');
+
+// Full list (for debugging)
+console.log("All Connected USB Devices:");
+console.log(listAllUsbDevices());
+
+// Only known printers (safer for production)
+console.log("Detected Printers:");
+console.log(listUsbPrinters());
+
   } catch (err) {
     next(err);
   }

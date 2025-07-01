@@ -66,3 +66,26 @@ exports.deleteStudent = async (req, res, next) => {
     next(err);
   }
 };
+
+
+exports.updateRFID = async (req, res) => {
+  const { oldRFID, newRFID } = req.body;
+  console.log('Updating RFID:', oldRFID, 'to', newRFID);
+  try {
+    // Find student by old RFID
+    const student = await Student.findOne({ rfidCard: oldRFID });
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student with old RFID not found.' });
+    }
+
+    // Update the RFID
+    student.rfidCard = newRFID;
+    await student.save();
+
+    res.status(200).json({ message: 'RFID updated successfully.', student });
+  } catch (error) {
+    console.error('Error updating RFID:', error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+};

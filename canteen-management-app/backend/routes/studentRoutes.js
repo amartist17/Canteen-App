@@ -14,6 +14,9 @@ router.post('/', studentController.createStudent);
 // Update student by ID
 router.put('/:id', studentController.updateStudent);
 
+// Update student RFID
+router.post('/update-rfid', studentController.updateRFID);
+
 // Delete student by ID
 router.delete('/:id', studentController.deleteStudent);
 

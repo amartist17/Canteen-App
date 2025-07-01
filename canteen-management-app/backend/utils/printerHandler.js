@@ -3,10 +3,13 @@ const { Printer, InMemory, Align, Image, Model } = require('escpos-buffer');
 const { ImageManager } = require('escpos-buffer-image');
 
 // Environment variables for printer vendor and product ID
-const VENDOR_ID = parseInt(process.env.VENDOR_ID, 10);
-const PRODUCT_ID = parseInt(process.env.PRODUCT_ID, 10);
+const VENDOR_ID = parseInt(process.env.VENDOR_ID, 16);
+const PRODUCT_ID = parseInt(process.env.PRODUCT_ID, 16);
+// const VENDOR_ID = process.env.VENDOR_ID;
+// const PRODUCT_ID = process.env.PRODUCT_ID;
 const logoPath = process.env.LOGO_PATH;
-
+console.log('VENDOR_ID:', VENDOR_ID);
+console.log('PRODUCT_ID:', PRODUCT_ID);
 // Helper function to connect to the printer
 function connectToPrinter() {
   const device = usb.findByIds(VENDOR_ID, PRODUCT_ID);

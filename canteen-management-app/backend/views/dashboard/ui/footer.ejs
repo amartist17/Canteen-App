@@ -115,6 +115,7 @@
   </div>
   <!--  Customizer -->
     <!--  Import Js Files -->
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="/libs/jquery/dist/jquery.min.js"></script>
     <script src="/libs/simplebar/dist/simplebar.min.js"></script>
     <script src="/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -394,14 +395,69 @@
 });
       </script>
 
+<!-- RFID Update Script -->
+<script>
+  $(document).ready(function () {
+    $('#updateRFIDForm').on('submit', function (e) {
+      e.preventDefault(); // Prevent default form submission
 
+      const formData = $(this).serialize(); // Serialize form data
+
+      console.log(formData); // Debug log
+
+      $.ajax({
+        url: '/students/update-rfid',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+          // Clear previous alerts
+          $('#RFIDUpdateAlert').html('');
+
+          // Success message
+          $('#RFIDUpdateAlert').html(`
+            <div class="alert alert-success" role="alert">
+              RFID updated successfully!
+            </div>
+          `);
+
+          console.log(response);
+
+          // Clear form inputs
+          $('#updateRFIDForm')[0].reset();
+
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            $('#RFIDUpdateAlert').html('');
+          }, 3000);
+        },
+        error: function (xhr) {
+          const errorMessage = xhr.responseJSON?.message || 'An error occurred';
+
+          // Show error alert
+          $('#RFIDUpdateAlert').html(`
+            <div class="alert alert-danger" role="alert">
+              ${errorMessage}
+            </div>
+          `);
+
+          console.log(errorMessage);
+
+          // Auto-hide after 3 seconds
+          setTimeout(() => {
+            $('#RFIDUpdateAlert').html('');
+          }, 3000);
+        }
+      });
+    });
+  });
+</script>
 
 <script>
   $(document).ready(function () {
 
-    new DataTable('#zero_config', {
-    order: [[1, 'desc']]
-});
+//     new DataTable('#zero_config', {
+//     order: [[1, 'desc']]
+// });
     $('#addLedgerForm').on('submit', function (e) {
       e.preventDefault(); // Prevent default form submission
 
