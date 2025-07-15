@@ -55,15 +55,35 @@
           <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex justify-content-center">
             <div class="d-flex justify-content-center w-100">
               <div class="row justify-content-center w-100 mt-6">
-                <div class="col-md-4 col-lg-4 col-xxl-4">
+                <div class="col-md-8 col-lg-8 col-xxl-4">
                   <div class="card mb-0 mt-8">
                     <div class="card-body">
                       <a href="#" class="text-nowrap logo-img text-center d-block mb-5 w-100">
                         <img src="/images/logos/pblogo.png" width="180" alt="">
                       </a>
-                      <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Add Entry</h2>
+                      <h2 class="mb-3 fs-7 fw-bolder" style="text-align: center;">Add Day End Entry</h2>
                       <form id="addLedgerForm">
-
+                        
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-pencil fs-4"></i>
+                            </button>
+                          </div>
+                          <select name="branch" class="form-select mr-sm-2" id="" required="">
+                            <option selected="" disabled="">Choose Counter</option>
+                            
+                              <option value="MBA">
+                                MBA
+                              </option>
+                              
+                              <option value="NORTH">
+                                NORTH
+                              </option>
+                            
+                              
+                          </select>
+                        </div>
                         <!-- POS Field -->
                         <div class="input-group mb-3 mt-3">
                           <div class="input-group-prepend">
@@ -80,7 +100,8 @@
                             required 
                           />
                         </div>
-                      
+
+
                         <!-- Machine Field -->
                         <div class="input-group mb-3 mt-3">
                           <div class="input-group-prepend">
@@ -98,7 +119,7 @@
                           />
                         </div>
                       
-                        <!-- Cash Field -->
+                        <!-- Opening Cash Field -->
                         <div class="input-group mb-3 mt-3">
                           <div class="input-group-prepend">
                             <button class="btn bg-info-subtle text-info" type="button">
@@ -107,10 +128,27 @@
                           </div>
                           <input 
                             type="number" 
-                            name="cash" 
+                            name="opening-cash" 
                             class="form-control" 
-                            placeholder="Enter Cash Amount" 
-                            aria-label="cash" 
+                            placeholder="Enter Opening Cash Amount" 
+                            aria-label="opening cash" 
+                            required 
+                          />
+                        </div>
+
+                         <!-- Closing Cash Field -->
+                        <div class="input-group mb-3 mt-3">
+                          <div class="input-group-prepend">
+                            <button class="btn bg-info-subtle text-info" type="button">
+                              <i class="ti ti-cash fs-4"></i>
+                            </button>
+                          </div>
+                          <input 
+                            type="number" 
+                            name="closing-cash" 
+                            class="form-control" 
+                            placeholder="Enter Closing Cash Amount" 
+                            aria-label="closing cash" 
                             required 
                           />
                         </div>
@@ -163,7 +201,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-8">
+                
+                <div class="col-12 mt-3">
                     <!-- ---------------------
                             start Zero Configuration
                         ---------------- -->
@@ -179,6 +218,7 @@
                                     <thead>
                                         <!-- start row -->
                                         <tr>
+                                            <th>Branch</th>
                                             <th>Date</th>
                                             <th>POS</th>
                                             <th>Machine</th>
@@ -196,6 +236,8 @@
                                         <!-- start row -->
                                          <% ledger.forEach(entry => { %>
                                             <tr>
+                                                <td><%= entry.branch || "NAN" %></td>
+
                                                 <td>
                                                     <% const date = new Date(entry.createdAt); %>
                                                     <%= date.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }) %> <br>
@@ -222,6 +264,7 @@
                                     <tfoot>
                                         <!-- start row -->
                                         <tr>
+                                            <th>Branch</th>
                                             <th>Date</th>
                                             <th>POS</th>
                                             <th>Machine</th>

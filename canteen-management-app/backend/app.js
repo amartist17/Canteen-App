@@ -37,6 +37,7 @@ app.use(limiter);
 
 // Routes
 app.use('/students', require('./routes/studentRoutes'));
+app.use('/staff', require('./routes/staffRoutes'));
 // app.use('/staff', require('./routes/staffRoutes'));
 app.use('/plans', require('./routes/planRoutes'));
 app.use('/transactions', require('./routes/transactionRoutes'));

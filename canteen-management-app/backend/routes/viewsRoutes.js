@@ -84,6 +84,29 @@ router.get('/add-staff', (req, res, next) => {
   }
 });
 
+// Mark Staff Attendance
+router.get('/staff-attendance', (req, res, next) => {
+  try {
+    res.render('dashboard/staff-attendance');
+  } catch (err) {
+    next(err);
+  }
+});
+
+const Staff = require('../models/Staff');
+
+// GET /staff/attendance-table
+router.get('/total-staff', async (req, res) => {
+  try {
+    const staffList = await Staff.find().lean();
+    res.render('dashboard/total-staff', { staffList }); // your EJS view name
+  } catch (err) {
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
 // Total Students
 router.get('/students/total-students',async (req, res, next) => {
   try {

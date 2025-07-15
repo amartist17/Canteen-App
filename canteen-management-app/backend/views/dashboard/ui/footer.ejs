@@ -351,6 +351,52 @@
 
      </script>
 
+<!-- Add Staff Script -->
+<script>
+  $(document).ready(function () {
+    $('#addStaffForm').on('submit', function (e) {
+      e.preventDefault(); // Prevent default form submission
+
+      const formData = $(this).serialize(); // Serialize form data
+
+      $.ajax({
+        url: '/staff/add', // Update with your API endpoint
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+          // Display success alert
+          $('#AddStaffAlert').html(`
+            <div class="alert alert-success" role="alert">
+              Staff member added successfully!
+            </div>
+          `);
+
+          // Clear the form
+          $('#addStaffForm')[0].reset();
+
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            $('#AddStaffAlert').html('');
+          }, 3000);
+        },
+        error: function (xhr) {
+          // Display error alert
+          const errorMessage = xhr.responseJSON?.message || 'An error occurred';
+          $('#AddStaffAlert').html(`
+            <div class="alert alert-danger" role="alert">
+              ${errorMessage}
+            </div>
+          `);
+
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            $('#AddStaffAlert').html('');
+          }, 3000);
+        },
+      });
+    });
+  });
+</script>
      <!-- Add Plan -->
       <script>
         $(document).ready(function () {
@@ -451,7 +497,7 @@
     });
   });
 </script>
-
+<!-- Ledger -->
 <script>
   $(document).ready(function () {
 
@@ -467,8 +513,12 @@
       let online2 = parseFloat($('input[name="online2"]').val()) || 0;
       let online = online1 + online2;
 
-      // Add 'Online' field to form data
+      let openingCash = parseFloat($('input[name="opening-cash"]').val()) || 0;
+      let closingCash = parseFloat($('input[name="closing-cash"]').val()) || 0;
+      let cash = closingCash - openingCash;
+      // Add 'Online,Cash' field to form data
       formData.push({ name: 'online', value: online });
+      formData.push({ name: 'cash', value: cash });
 
       $.ajax({
         url: '/ledger/entry', // Update with your API endpoint
@@ -510,6 +560,39 @@
  
 </script>
 
+    <script>
+      $(document).ready(function () {
+        $('#staffAttendanceForm').on('submit', function (e) {
+          e.preventDefault();
+
+          const formData = $(this).serialize();
+
+          $.ajax({
+            url: '/staff/mark-attendance',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+              $('#AttendanceAlert').html(`
+                <div class="alert alert-success" role="alert">
+                  Attendance marked successfully!
+                </div>
+              `);
+              $('#staffAttendanceForm')[0].reset();
+              setTimeout(() => $('#AttendanceAlert').html(''), 3000);
+            },
+            error: function (xhr) {
+              const errorMessage = xhr.responseJSON?.message || 'An error occurred';
+              $('#AttendanceAlert').html(`
+                <div class="alert alert-danger" role="alert">
+                  ${errorMessage}
+                </div>
+              `);
+              setTimeout(() => $('#AttendanceAlert').html(''), 3000);
+            },
+          });
+        });
+      });
+    </script>
       
   </body>
 

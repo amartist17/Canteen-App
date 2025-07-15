@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const LedgerSchema = new mongoose.Schema({
+    branch:{
+        type: String,
+        required: true,
+        trim: true
+    },
     POS: {
         type: Number,
         required: true,

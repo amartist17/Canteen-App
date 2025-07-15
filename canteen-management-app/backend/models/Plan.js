@@ -63,7 +63,22 @@ const PlanSchema = new mongoose.Schema({
     default: 'online',
     required: true,
   },
+  active: {
+  type: String,
+  enum: ['active', 'expired'],
+  default: 'active',
+},
+
 }, { timestamps: true });
+
+// Instance method to update active status based on end date
+PlanSchema.methods.updatePlanStatus = async function() {
+  if (this.active === 'active' && new Date() > this.endDate) {
+    this.active = 'expired';
+    await this.save();
+  }
+};
+
 
 // Determines the current meal based on the time
 PlanSchema.methods.getCurrentMeal = function () {
