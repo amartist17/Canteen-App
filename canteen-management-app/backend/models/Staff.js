@@ -84,14 +84,14 @@ StaffSchema.statics.markAttendance = async function(rfidCard) {
   const staff = await this.findOne({ rfidCard });
   if (!staff) throw new Error('Staff member not found.');
 
-  const today = new Date().setHours(0, 0, 0, 0);
-  let attendanceToday = staff.attendance.find(att => 
-    new Date(att.date).setHours(0, 0, 0, 0) === today
+  const now = new Date();
+  const todayMidnight = new Date(now.setHours(0, 0, 0, 0));
+
+  let attendanceToday = staff.attendance.find(att =>
+    new Date(att.date).setHours(0, 0, 0, 0) === todayMidnight.getTime()
   );
 
-  const now = new Date();
   const ONE_HOUR_MS = 60 * 60 * 1000; // 1 hour in milliseconds
-
   let action;
 
   if (attendanceToday) {
@@ -99,34 +99,36 @@ StaffSchema.statics.markAttendance = async function(rfidCard) {
       const checkInTime = attendanceToday.checkIn;
 
       // Ensure at least one hour has passed since check-in
-      if ((now - checkInTime) < ONE_HOUR_MS) {
+      if ((Date.now() - new Date(checkInTime)) < ONE_HOUR_MS) {
         throw new Error('Cannot check out yet. At least one hour must pass after check-in.');
       }
 
-      attendanceToday.checkOut = now;
+      attendanceToday.checkOut = new Date();
       action = 'Checked out successfully';
-
     } else {
       throw new Error('Attendance already completed for today.');
     }
   } else {
-    // Check previous attendance if within an hour to prevent accidental double check-in
+    // Check previous attendance for accidental double scan
     const lastAttendance = staff.attendance[staff.attendance.length - 1];
-    if (lastAttendance && (now - lastAttendance.checkIn) < ONE_HOUR_MS) {
+    if (lastAttendance && (Date.now() - new Date(lastAttendance.checkIn)) < ONE_HOUR_MS) {
       throw new Error('Check-in already marked recently. Please wait before checking in again.');
     }
 
+    // ✅ Fix: Include explicit `date`
     staff.attendance.push({
-      date: now,
-      checkIn: now,
+      date: new Date(),
+      checkIn: new Date(),
       status: 'Present'
     });
+
     action = 'Checked in successfully';
   }
 
   await staff.save();
   return action;
 };
+
 
 
 const Staff = mongoose.model('Staff', StaffSchema);
