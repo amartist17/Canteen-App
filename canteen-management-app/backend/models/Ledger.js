@@ -16,6 +16,11 @@ const LedgerSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
+    expenses: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     cash: {
         type: Number,
         required: true,

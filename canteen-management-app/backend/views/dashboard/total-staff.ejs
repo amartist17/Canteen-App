@@ -75,9 +75,11 @@
               <th>Department</th>
               <th>Position</th>
               <th>Joining Date</th>
-              <th>Last Attendance</th>
+              <th>Todays Attendance</th>
               <th>Check-In</th>
-              <th>Check-Out</th>
+              <th>Break Out</th>
+              <th>Break Return</th>
+              <th>Check Out</th>
             </tr>
           </thead>
           <tbody>
@@ -93,8 +95,10 @@
                 <td><%= staff.position %></td>
                 <td><%= staff.joiningDate?.toISOString().split('T')[0] || 'N/A' %></td>
                 <td><%= lastAttendance?.status || 'N/A' %></td>
-                <td><%= lastAttendance?.checkIn?.toLocaleString() || 'N/A' %></td>
-                <td><%= lastAttendance?.checkOut?.toLocaleString() || 'N/A' %></td>
+                <td><%= lastAttendance?.entryTime?.toLocaleString() || 'N/A' %></td>
+                <td><%= lastAttendance?.breakOutTime?.toLocaleString() || 'N/A' %></td>
+                <td><%= lastAttendance?.breakReturnTime?.toLocaleString() || 'N/A' %></td>
+                <td><%= lastAttendance?.dutyOffTime?.toLocaleString() || 'N/A' %></td>
               </tr>
             <% }) %>
           </tbody>

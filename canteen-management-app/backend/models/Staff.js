@@ -59,24 +59,30 @@ const StaffSchema = new mongoose.Schema({
         amount: { type: Number, required: true }
     }],
     attendance: [{
-        date: {
-            type: Date,
-            required: true
-        },
-        checkIn: {
-            type: Date,
-            required: true
-        },
-        checkOut: {
-            type: Date
-        },
-        status: {
-            type: String,
-            enum: ['Present', 'Absent', 'Late', 'Half Day', 'Leave'],
-            required: true,
-            default: 'Present'
-        }
-    }]
+  date: {
+    type: Date,
+    required: true
+  },
+  entryTime: {
+    type: Date
+  },
+  breakOutTime: {
+    type: Date
+  },
+  breakReturnTime: {
+    type: Date
+  },
+  dutyOffTime: {
+    type: Date
+  },
+  status: {
+    type: String,
+    enum: ['Present', 'Absent', 'Late', 'Half Day', 'Leave'],
+    required: true,
+    default: 'Present'
+  }
+}]
+
 }, { timestamps: true });
 
 // Static method to mark attendance with one-hour gap handling
@@ -85,44 +91,45 @@ StaffSchema.statics.markAttendance = async function(rfidCard) {
   if (!staff) throw new Error('Staff member not found.');
 
   const now = new Date();
-  const todayMidnight = new Date(now.setHours(0, 0, 0, 0));
+  const todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
 
   let attendanceToday = staff.attendance.find(att =>
     new Date(att.date).setHours(0, 0, 0, 0) === todayMidnight.getTime()
   );
 
-  const ONE_HOUR_MS = 60 * 60 * 1000; // 1 hour in milliseconds
-  let action;
+  const ONE_MIN_GAP = 60 * 1000; // 1 min (safety against scanner double clicks)
+  let action = '';
 
-  if (attendanceToday) {
-    if (!attendanceToday.checkOut) {
-      const checkInTime = attendanceToday.checkIn;
-
-      // Ensure at least one hour has passed since check-in
-      if ((Date.now() - new Date(checkInTime)) < ONE_HOUR_MS) {
-        throw new Error('Cannot check out yet. At least one hour must pass after check-in.');
-      }
-
-      attendanceToday.checkOut = new Date();
-      action = 'Checked out successfully';
-    } else {
-      throw new Error('Attendance already completed for today.');
-    }
-  } else {
-    // Check previous attendance for accidental double scan
-    const lastAttendance = staff.attendance[staff.attendance.length - 1];
-    if (lastAttendance && (Date.now() - new Date(lastAttendance.checkIn)) < ONE_HOUR_MS) {
-      throw new Error('Check-in already marked recently. Please wait before checking in again.');
-    }
-
-    // ✅ Fix: Include explicit `date`
+  if (!attendanceToday) {
+    // Add new attendance record
     staff.attendance.push({
       date: new Date(),
-      checkIn: new Date(),
+      entryTime: now,
       status: 'Present'
     });
+    action = 'Entry marked';
+  } else {
+    // Prevent double scan within 1 minute of last recorded time
+    const lastTimes = [attendanceToday.dutyOffTime, attendanceToday.breakReturnTime, attendanceToday.breakOutTime, attendanceToday.entryTime];
+    const lastRecorded = lastTimes.reverse().find(Boolean);
+    if (lastRecorded && now - lastRecorded < ONE_MIN_GAP) {
+      throw new Error('Already marked recently. Please wait before trying again.');
+    }
 
-    action = 'Checked in successfully';
+    // Determine the next stage
+    if (!attendanceToday.breakOutTime) {
+      attendanceToday.breakOutTime = now;
+      action = 'Break out marked';
+    } else if (!attendanceToday.breakReturnTime) {
+      attendanceToday.breakReturnTime = now;
+      action = 'Break return marked';
+    } else if (!attendanceToday.dutyOffTime) {
+      attendanceToday.dutyOffTime = now;
+      action = 'Duty off marked';
+    } else {
+      throw new Error('All attendance points already marked for today.');
+    }
   }
 
   await staff.save();
