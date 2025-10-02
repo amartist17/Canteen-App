@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Mordenize</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="handheldfriendly" content="true" />
+  <meta name="MobileOptimized" content="width" />
+  <meta name="description" content="Mordenize" />
+  <meta name="author" content="" />
+  <meta name="keywords" content="Mordenize" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="shortcut icon" type="image/png" href="/images/logos/favicon.png" />
+  <link rel="stylesheet" href="/libs/owl.carousel/dist/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="/libs/prismjs/themes/prism.min.css">
+  <link id="themeColors" rel="stylesheet" href="/css/style.min.css" />
+  <link rel="stylesheet" href="/dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+  <style>
+    .bg-info-subtle{border-top-right-radius:0;border-bottom-right-radius:0;height:39px!important;}
+    .badge-pill{border-radius:999px;padding:.25rem .5rem;font-size:.75rem}
+    .font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
+  </style>
+</head>
+<body>
+  <div class="preloader">
+    <img src="/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+  </div>
+
+  <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <%- include('./ui/sidenav') %>
+
+    <div class="body-wrapper">
+      <%- include('./ui/header') %>
+      <div class="container-fluid">
+        <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex justify-content-center">
+          <div class="d-flex justify-content-center w-100">
+            <div class="row justify-content-center w-100 mt-6">
+
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                      <h5 class="mb-0"><%= title || 'Student Logs' %></h5>
+
+                      <!-- Filters -->
+                      <form method="get" action="/dashboard/students/logs" class="d-flex gap-2">
+                        <input type="date" name="from" class="form-control" value="<%= (filters && filters.from) || '' %>" />
+                        <input type="date" name="to" class="form-control" value="<%= (filters && filters.to) || '' %>" />
+                        <select name="type" class="form-select">
+                          <option value="all" <%= (filters && filters.type === 'all') ? 'selected' : '' %>>All</option>
+                          <option value="recharge" <%= (filters && filters.type === 'recharge') ? 'selected' : '' %>>Recharge</option>
+                          <option value="deduction" <%= (filters && filters.type === 'deduction') ? 'selected' : '' %>>Deduction</option>
+                          <option value="meal-deduction" <%= (filters && filters.type === 'meal-deduction') ? 'selected' : '' %>>Meal Deduction</option>
+                          <option value="plan-update" <%= (filters && filters.type === 'plan-update') ? 'selected' : '' %>>Plan Update</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                      </form>
+                    </div>
+
+                    <div class="table-responsive" style="overflow-x:auto;">
+                      <table id="zero_config" class="table border table-bordered text-nowrap" style="width:100%; overflow-x:scroll;">
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>Time (IST)</th>
+                            <th>Type</th>
+                            <th>RFID</th>
+                            <th>Name</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                          </tr>
+                        </thead>
+                      <tbody>
+  <% if (Array.isArray(rows) && rows.length) { %>
+    <% rows.forEach(r => { 
+      const d = new Date(r.at);
+      // Normalize to IST for BOTH display and sort keys
+      const ist = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+
+      const dd = ist.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); // e.g., 30 Sept 2025
+      const tt = ist.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+
+      // Sort keys
+      const sortDateMs = Date.UTC(ist.getFullYear(), ist.getMonth(), ist.getDate()); // midnight IST as UTC ms
+      const sortTimeMin = ist.getHours() * 60 + ist.getMinutes();                   // minutes since midnight
+    %>
+      <tr>
+        <!-- use data-order so DataTables sorts by the numeric key, not the text -->
+        <td data-order="<%= sortDateMs %>"><%= dd %></td>
+        <td data-order="<%= sortTimeMin %>"><%= tt %></td>
+        <td><span class="badge-pill bg-info-subtle text-dark"><%= r.type %></span></td>
+        <td class="font-mono"><%= r.rfid || '—' %></td>
+        <td><%= r.name || '—' %></td>
+        <td><%= r.duration || 'Outside Slots' %></td>
+        <td>
+          <% if (r.status === 'success') { %>
+            <span class="badge-pill bg-success-subtle text-success">success</span>
+          <% } else if (r.status === 'failure') { %>
+            <span class="badge-pill bg-danger-subtle text-danger">failure</span>
+          <% } else { %>
+            <span class="badge-pill bg-warning-subtle text-warning"><%= r.status || 'processing' %></span>
+          <% } %>
+        </td>
+        <td title="<%= r.reason || '' %>"><%= r.reason || '—' %></td>
+      </tr>
+    <% }) %>
+  <% } else { %>
+    <tr>
+      <td colspan="8" class="text-center text-muted">No records</td>
+    </tr>
+  <% } %>
+</tbody>
+
+                        <tfoot>
+                          <tr>
+                            <th>Date</th>
+                            <th>Time (IST)</th>
+                            <th>Type</th>
+                            <th>RFID</th>
+                            <th>Name</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+
+                    <!-- Optional legend -->
+                    <div class="mt-3 text-muted small">
+                      Meal Windows (IST): Breakfast 07:30–09:30 • Brunch 09:30–11:30 • Lunch 11:30–14:30 • Snacks 16:00–19:00 • Dinner 19:00–21:00
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- row -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./ui/footer') %>
+</body>
+</html>

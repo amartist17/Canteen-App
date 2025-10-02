@@ -74,6 +74,7 @@
                                         <tr>
                                           <th>Active</th>
                                           <th>Date</th>
+                                          <th>Expire</th>
                                             <th>Student Id</th>
                                             <th>Name</th>
                                             <th>Phone</th>
@@ -93,28 +94,38 @@
                                          <% students.forEach(student => { %>
                                             <tr>
 
-                                                <%
-                                              let yy = '', mm = '', dd = '';
-                                              if (student.currentPlan && student.currentPlan.startDate) {
-                                                const date = new Date(student.currentPlan.startDate);
-                                                yy = String(date.getFullYear()).slice(-2);
-                                                mm = String(date.getMonth() + 1).padStart(2, '0');
-                                                dd = String(date.getDate()).padStart(2, '0');
-                                              }
-%>
-                                                <td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.active : 'No Plan'%></td>
+                                               <% 
+  let yy = '', mm = '', dd = '';
+  if (student.currentPlan && student.currentPlan.startDate) {
+    const date = new Date(student.currentPlan.startDate);
+    yy = String(date.getFullYear()).slice(-2);
+    mm = String(date.getMonth() + 1).padStart(2, '0');
+    dd = String(date.getDate()).padStart(2, '0');
+  }
 
-                                                <td><%= student.currentPlan && student.currentPlan.startDate ? `${yy}/${mm}/${dd}` : 'N/A' %></td>
-                                                <td><%= student.studentId %></td>
-                                                <td><%= student.name %></td>
-                                                <td><%= student.phone %></td>
-                                                <td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.planName : 'No Plan'%></td>
+  let eyy = '', emm = '', edd = '';
+  if (student.currentPlan && student.currentPlan.endDate) {
+    const edate = new Date(student.currentPlan.endDate);
+    eyy = String(edate.getFullYear()).slice(-2);
+    emm = String(edate.getMonth() + 1).padStart(2, '0');
+    edd = String(edate.getDate()).padStart(2, '0');
+  }
+%>
+
+<td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.active : 'No Plan'%></td>
+
+<td><%= student.currentPlan && student.currentPlan.startDate ? `${yy}/${mm}/${dd}` : 'N/A' %></td>
+<td><%= student.currentPlan && student.currentPlan.endDate ? `${eyy}/${emm}/${edd}` : 'N/A' %></td>
+<td><%= student.studentId %></td>
+<td><%= student.name %></td>
+<td><%= student.phone %></td>
+<td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.planName : 'No Plan'%></td>
 <td><%= student.currentPlan && student.currentPlan.thaliType ? student.currentPlan.thaliType : "Null" %></td>
-                                                <td><%= student.rfidCard %></td>
-                                                <td><%= student.cashBalance %></td>
-                                           <td><%= student.currentPlan && student.currentPlan.mealUsage ? student.currentPlan.mealUsage.length : 0 %></td>
-                                           <td><%= student.currentPlan && student.currentPlan.mealUsage ? student.currentPlan : 0 %></td>
-                                                
+<td><%= student.rfidCard %></td>
+<td><%= student.cashBalance %></td>
+<td><%= student.currentPlan && student.currentPlan.mealUsage ? student.currentPlan.mealUsage.length : 0 %></td>
+<td><%= student.currentPlan && student.currentPlan.mealUsage ? student.currentPlan : 0 %></td>
+
                                                 
                                                                                                 
                                             </tr>
@@ -126,6 +137,7 @@
                                         <!-- start row -->
                                         <tr>
                                           <th>Date</th>
+                                          <th>Expire</th>
                                             <th>Student Id</th>
                                             <th>Name</th>
                                             <th>Phone</th>

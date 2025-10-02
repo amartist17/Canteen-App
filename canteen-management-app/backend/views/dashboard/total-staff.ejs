@@ -71,10 +71,6 @@
               <th>Status</th>
               <th>Name</th>
               <th>Phone</th>
-              <th>RFID</th>
-              <th>Department</th>
-              <th>Position</th>
-              <th>Joining Date</th>
               <th>Todays Attendance</th>
               <th>Check-In</th>
               <th>Break Out</th>
@@ -82,26 +78,21 @@
               <th>Check Out</th>
             </tr>
           </thead>
-          <tbody>
-            <% staffList.forEach(staff => { 
-                const lastAttendance = staff.attendance?.[staff.attendance.length - 1];
-            %>
-              <tr>
-                <td><%= staff.active %></td>
-                <td><%= staff.name %></td>
-                <td><%= staff.phone %></td>
-                <td><%= staff.rfidCard %></td>
-                <td><%= staff.department %></td>
-                <td><%= staff.position %></td>
-                <td><%= staff.joiningDate?.toISOString().split('T')[0] || 'N/A' %></td>
-                <td><%= lastAttendance?.status || 'N/A' %></td>
-                <td><%= lastAttendance?.entryTime?.toLocaleString() || 'N/A' %></td>
-                <td><%= lastAttendance?.breakOutTime?.toLocaleString() || 'N/A' %></td>
-                <td><%= lastAttendance?.breakReturnTime?.toLocaleString() || 'N/A' %></td>
-                <td><%= lastAttendance?.dutyOffTime?.toLocaleString() || 'N/A' %></td>
-              </tr>
-            <% }) %>
-          </tbody>
+     <tbody>
+  <% staffList.forEach(staff => { const a = staff.todayAttendance; %>
+  <tr>
+    <td><%= staff.active %></td>
+    <td><%= staff.name %></td>
+    <td><%= staff.phone %></td>
+
+    <td><%= staff.todayStatus %></td>
+    <td><%= a?.entryTime?.toLocaleString('en-IN') || 'N/A' %></td>
+    <td><%= a?.breakOutTime?.toLocaleString('en-IN') || 'N/A' %></td>
+    <td><%= a?.breakReturnTime?.toLocaleString('en-IN') || 'N/A' %></td>
+    <td><%= a?.dutyOffTime?.toLocaleString('en-IN') || 'N/A' %></td>
+  </tr>
+  <% }) %>
+</tbody>
         </table>
       </div>
     </div>

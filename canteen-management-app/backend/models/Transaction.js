@@ -34,6 +34,9 @@ const TransactionSchema = new mongoose.Schema({
       enum: ['processing', 'success', 'failure'],
       default: 'processing',
     },
+      orphaned:    { type: Boolean, default: false, index: true },
+  orphanReason:{ type: String },
+  orphanedAt:  { type: Date },
   },
   { timestamps: true }
 );
@@ -99,6 +102,108 @@ TransactionSchema.statics.updateTransactionStatus = async function (transactionI
   await transaction.save();
   return transaction;
 };
+// TRANSFER-BASED studentLogs (rechecked)
+TransactionSchema.statics.studentLogs = async function ({
+  from,
+  to,
+  type = 'all',
+  limit = 500,
+  includeHistory = false, // also match via students.rfidHistory if true
+} = {}) {
+  const p = [];
 
+  // 1) Optional type filter
+  if (type && type !== 'all') p.push({ $match: { type } });
+
+  // 2) Coalesce timestamp -> 'at'
+  p.push({
+    $addFields: {
+      at: { $ifNull: ['$date', { $ifNull: ['$occurredAt', '$createdAt'] }] },
+    },
+  });
+
+  // 3) Date range on 'at'
+  if (from || to) {
+    const range = {};
+    if (from) range.$gte = new Date(from);
+    if (to) { const end = new Date(to); end.setHours(23, 59, 59, 999); range.$lte = end; }
+    p.push({ $match: { at: range } });
+  }
+
+  // 4) Join Student by current RFID; optionally include rfidHistory
+  const studentMatchExpr = includeHistory
+    ? {
+        $or: [
+          { $eq: ['$rfidCard', '$$rf'] },
+          { $in: ['$$rf', { $ifNull: ['$rfidHistory', []] }] },
+        ],
+      }
+    : { $eq: ['$rfidCard', '$$rf'] };
+
+  p.push({
+    $lookup: {
+      from: 'students',
+      let: { rf: '$rfidCard' },
+      pipeline: [
+        { $match: { $expr: studentMatchExpr } },
+        { $project: { _id: 1, name: 1, rfidCard: 1 } },
+        { $limit: 1 },
+      ],
+      as: 'student',
+    },
+  });
+
+  // 5) Keep only rows that matched a student
+  p.push({ $unwind: { path: '$student', preserveNullAndEmptyArrays: false } });
+
+  // 6) Slot labels (IST)
+  p.push(
+    { $addFields: { istParts: { $dateToParts: { date: '$at', timezone: 'Asia/Kolkata' } } } },
+    {
+      $addFields: {
+        minutes: { $add: [{ $multiply: ['$istParts.hour', 60] }, '$istParts.minute'] },
+        duration: {
+          $switch: {
+            branches: [
+              { case: { $and: [{ $gte: ['$minutes', 450] }, { $lt: ['$minutes', 570] }] }, then: 'Breakfast' }, // 07:30–09:30
+              { case: { $and: [{ $gte: ['$minutes', 570] }, { $lt: ['$minutes', 690] }] }, then: 'Brunch' },    // 09:30–11:30
+              { case: { $and: [{ $gte: ['$minutes', 690] }, { $lt: ['$minutes', 870] }] }, then: 'Lunch' },     // 11:30–14:30
+              { case: { $and: [{ $gte: ['$minutes', 960] }, { $lt: ['$minutes', 1140] }] }, then: 'Snacks' },   // 16:00–19:00
+              { case: { $and: [{ $gte: ['$minutes', 1140] }, { $lt: ['$minutes', 1260] }] }, then: 'Dinner' },  // 19:00–21:00
+            ],
+            default: 'Outside Slots',
+          },
+        },
+      },
+    }
+  );
+
+  // 7) Final shape
+  p.push(
+    {
+      $project: {
+        _id: 0,
+        transId: '$_id',
+        at: 1,
+        type: 1,
+        rfid: '$rfidCard',
+        studentId: '$student._id',
+        name: '$student.name',
+        duration: 1,
+        status: 1,
+        reason: { $ifNull: ['$failureReason', '$description'] },
+      },
+    },
+    { $sort: { at: -1 } },
+    { $limit: Math.max(1, Number(limit) || 500) }
+  );
+
+  return this.aggregate(p);
+};
+
+
+// Transactions
+TransactionSchema.index({ type: 1, createdAt: -1 });
+TransactionSchema.index({ rfidCard: 1 });
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

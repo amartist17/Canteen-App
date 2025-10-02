@@ -40,4 +40,41 @@ router.delete('/:id', studentController.deleteStudent);
 //   });
   
 
+// const Transaction = require('../models/Transaction');
+
+// // POST /maintenance/remove-orphan-transactions?dryRun=1&includeHistory=1
+// router.post('/maintenance/remove-orphan-transactions', async (req, res) => {
+//   try {
+//     const dryRun = /^(1|true|yes)$/i.test(String(req.query.dryRun || req.body?.dryRun || ''));
+//     const includeHistory = /^(1|true|yes)$/i.test(String(req.query.includeHistory || req.body?.includeHistory || ''));
+
+//     // valid RFIDs = all current cards (+ history if requested)
+//     let validRFIDs = await Student.distinct('rfidCard');
+//     if (includeHistory) {
+//       const hist = await Student.aggregate([
+//         { $unwind: { path: '$rfidHistory', preserveNullAndEmptyArrays: false } },
+//         { $group: { _id: null, list: { $addToSet: '$rfidHistory' } } },
+//         { $project: { _id: 0, list: 1 } }
+//       ]);
+//       validRFIDs = validRFIDs.concat(hist[0]?.list || []);
+//     }
+
+//     const filter = {
+//       rfidCard: { $exists: true, $ne: null, $nin: validRFIDs },
+//     };
+
+//     if (dryRun) {
+//       const count = await Transaction.countDocuments(filter);
+//       return res.status(200).json({ success: true, dryRun: true, wouldDelete: count });
+//     }
+
+//     const delRes = await Transaction.deleteMany(filter);
+//     return res.status(200).json({ success: true, deleted: delRes.deletedCount || 0 });
+//   } catch (err) {
+//     console.error('remove-orphan-transactions error:', err);
+//     return res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// });
+
+
 module.exports = router;

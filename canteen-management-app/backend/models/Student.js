@@ -52,8 +52,8 @@ const StudentSchema = new mongoose.Schema({
     type: Number,
     default: 0,
     validate: {
-      validator: (v) => v >= -200,
-      message: (props) => `Cash balance cannot go below -200. Current: ${props.value}`,
+      validator: (v) => v >= 0,
+      message: (props) => `Cash balance cannot go below 0. Current: ${props.value}`,
     },
   },
   transactionHistory: [
@@ -122,7 +122,7 @@ StudentSchema.methods.rechargeCash = async function (amount) {
 
 // Deduct cash from the student's balance
 StudentSchema.methods.deductCash = async function (amount) {
-  if (amount <= 0 || this.cashBalance - amount < -200) {
+  if (amount <= 0 || this.cashBalance - amount < 0) {
     throw new AppError(`Insufficient balance. Available: ${this.cashBalance}`, 400);
   }
   this.cashBalance -= amount;

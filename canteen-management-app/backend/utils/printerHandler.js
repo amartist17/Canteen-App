@@ -38,8 +38,10 @@ async function printReceipt(bodyContent, newLogo) {
     const printer = await Printer.CONNECT('POS-80', connection, imageManager);
 
     await printer.withStyle({
-      width: 60,
-      height: 48,
+      // width: 60,
+      // height: 48,      
+      width: 1,
+      height: 1,
       font: 'b',
       align: Align.Center,
       size: [1, 1],

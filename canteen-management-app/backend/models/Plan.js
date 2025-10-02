@@ -152,6 +152,9 @@ PlanSchema.methods.deductFixedMeal = async function (student, currentMeal) {
 
 // Deducts a flexible meal
 PlanSchema.methods.deductFlexibleMeal = async function (student, currentMeal) {
+  const today = new Date().toISOString().split('T')[0];
+  if (new Date(this.endDate) < new Date()) throw new AppError(`Plan Expired`, 400);
+
   if (this.mealDetails.totalMeals <= 0) throw new AppError('No meals remaining in the plan', 400);
   if (!currentMeal) throw new AppError('No meal available at this time for deduction.', 400);
 
