@@ -77,13 +77,10 @@
                                           <th>Expire</th>
                                             <th>Student Id</th>
                                             <th>Name</th>
-                                            <th>Phone</th>
                                             <th>Current Plan</th>
-                                            <th>Current Thali</th>
                                             <th>RFID</th>
                                             <th>Balance</th>
-                                            <th>Total Meals</th>
-                                            <th>Total Meals</th>
+                                            <th>Meals Left</th>
                                         </tr>
                                         <!-- end row -->
                                     </thead>
@@ -114,17 +111,28 @@
 
 <td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.active : 'No Plan'%></td>
 
-<td><%= student.currentPlan && student.currentPlan.startDate ? `${yy}/${mm}/${dd}` : 'N/A' %></td>
-<td><%= student.currentPlan && student.currentPlan.endDate ? `${eyy}/${emm}/${edd}` : 'N/A' %></td>
+<td><%= student.currentPlan && student.currentPlan.startDate ? `${dd}/${mm}/${yy}` : 'N/A' %></td>
+<td><%= student.currentPlan && student.currentPlan.endDate ? `${edd}/${emm}/${eyy}` : 'N/A' %></td>
 <td><%= student.studentId %></td>
-<td><%= student.name %></td>
-<td><%= student.phone %></td>
-<td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.planName : 'No Plan'%></td>
-<td><%= student.currentPlan && student.currentPlan.thaliType ? student.currentPlan.thaliType : "Null" %></td>
+<td><%= student.name %><% if (student.phone) { %>
+              <div
+                style="font-size:12px; opacity:0.8; line-height:1.1; margin-top:2px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+                <%= student.phone %>
+              </div>
+            <% } %></td>
+
+<td><%= student.currentPlan && student.currentPlan.planName ? student.currentPlan.planName : 'No Plan'%>
+<% if (student.currentPlan && student.currentPlan.thaliType) { %>
+              <div
+                style="font-size:12px; opacity:0.8; line-height:1.1; margin-top:2px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+                <%= student.currentPlan.thaliType %>
+              </div>
+            <% } %>
+</td>
+
 <td><%= student.rfidCard %></td>
 <td><%= student.cashBalance %></td>
-<td><%= student.currentPlan && student.currentPlan.mealUsage ? student.currentPlan.mealUsage.length : 0 %></td>
-<td><%= student.currentPlan && student.currentPlan.mealUsage ? student.currentPlan : 0 %></td>
+<td><%= student.currentPlan && student.currentPlan.mealDetails ? student.currentPlan.mealDetails.totalMeals : 0 %></td>
 
                                                 
                                                                                                 
@@ -136,17 +144,15 @@
                                     <tfoot>
                                         <!-- start row -->
                                         <tr>
+                                          <th>Active</th>
                                           <th>Date</th>
                                           <th>Expire</th>
                                             <th>Student Id</th>
                                             <th>Name</th>
-                                            <th>Phone</th>
                                             <th>Current Plan</th>
-                                            <th>Current Thali</th>
                                             <th>RFID</th>
                                             <th>Balance</th>
-                                            <th>Total Meals</th>
-                                            <th>Total Meals</th>
+                                            <th>Meals Left</th>
                                         <!-- end row -->
                                     </tfoot>
                                 </table>

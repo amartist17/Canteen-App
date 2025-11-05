@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  
-<head>
+  <head>
     <!--  Title -->
     <title>Mordenize</title>
     <!--  Required Meta Tag -->
@@ -14,99 +13,133 @@
     <meta name="keywords" content="Mordenize" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!--  Favicon -->
-    <link rel="shortcut icon" type="image/png" href="/images/logos/favicon.png" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/images/logos/favicon.png"
+    />
     <!-- Owl Carousel  -->
-    <link rel="stylesheet" href="/libs/owl.carousel/dist/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="/libs/prismjs/themes/prism.min.css">
+    <link
+      rel="stylesheet"
+      href="/libs/owl.carousel/dist/assets/owl.carousel.min.css"
+    />
+    <link rel="stylesheet" href="/libs/prismjs/themes/prism.min.css" />
     <!-- Core Css -->
-    <link  id="themeColors"  rel="stylesheet" href="/css/style.min.css" />
-    <link rel="stylesheet" href="../../dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+    <link id="themeColors" rel="stylesheet" href="/css/style.min.css" />
+    <link
+      rel="stylesheet"
+      href="../../dist/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+    />
 
     <style>
-        .bg-info-subtle{
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            height: 39px !important;
-        }
-
+      .bg-info-subtle {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        height: 39px !important;
+      }
     </style>
   </head>
   <body>
     <!-- Preloader -->
     <div class="preloader">
-      <img src="/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+      <img
+        src="/images/logos/favicon.png"
+        alt="loader"
+        class="lds-ripple img-fluid"
+      />
     </div>
     <!-- Preloader -->
     <div class="preloader">
-      <img src="/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+      <img
+        src="/images/logos/favicon.png"
+        alt="loader"
+        class="lds-ripple img-fluid"
+      />
     </div>
     <!--  Body Wrapper -->
-    <div class="page-wrapper" id="main-wrapper" data-theme="blue_theme"  data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-      
-      
+    <div
+      class="page-wrapper"
+      id="main-wrapper"
+      data-theme="blue_theme"
+      data-layout="vertical"
+      data-sidebartype="full"
+      data-sidebar-position="fixed"
+      data-header-position="fixed"
+    >
       <%- include('./ui/sidenav') %>
-      
-      
+
       <!--  Main wrapper -->
       <div class="body-wrapper">
-        
         <%- include('./ui/header') %>
         <div class="container-fluid">
-          <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex justify-content-center">
+          <div
+            class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex justify-content-center"
+          >
             <div class="d-flex justify-content-center w-100">
               <div class="row justify-content-center w-100 mt-6">
-                
-             <div class="col-12">
-  <div class="card">
-    <div class="card-body">
-      <div class="mb-2">
-        <h5 class="mb-0">Staff Attendance Ledger</h5>
-      </div>
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="mb-2">
+                        <h5 class="mb-0">Staff Attendance Ledger</h5>
+                      </div>
 
-      <div class="table-responsive" style="overflow-x: auto;">
-                                <table id="zero_config"  style="width:100%; overflow-x: scroll;"
-                                    class="table border  table-bordered text-nowrap">
-                                    <thead>
-            <tr>
-              <th>Status</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Todays Attendance</th>
-              <th>Check-In</th>
-              <th>Break Out</th>
-              <th>Break Return</th>
-              <th>Check Out</th>
-            </tr>
-          </thead>
-     <tbody>
-  <% staffList.forEach(staff => { const a = staff.todayAttendance; %>
-  <tr>
-    <td><%= staff.active %></td>
-    <td><%= staff.name %></td>
-    <td><%= staff.phone %></td>
+                      <div class="table-responsive" style="overflow-x: auto">
+                        <table
+                          id="zero_config"
+                          style="width: 100%; overflow-x: scroll"
+                          class="table border table-bordered text-nowrap"
+                        >
+                          <thead>
+                            <tr>
+                              <!-- <th>Status</th> -->
+                              <th>Name</th>
+                              <th>Todays Attendance</th>
+                              <th>Check-In</th>
+                              <th>Break Out</th>
+                              <th>Break Return</th>
+                              <th>Check Out</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% staffList.forEach(staff => { const a =
+                            staff.todayAttendance; %>
+                            <tr>
+                              <td><%= staff.name %>
+                                <br><span style="opacity: 0.8; font-size: 12px;"><%= staff.phone %></span></td>
 
-    <td><%= staff.todayStatus %></td>
-    <td><%= a?.entryTime?.toLocaleString('en-IN') || 'N/A' %></td>
-    <td><%= a?.breakOutTime?.toLocaleString('en-IN') || 'N/A' %></td>
-    <td><%= a?.breakReturnTime?.toLocaleString('en-IN') || 'N/A' %></td>
-    <td><%= a?.dutyOffTime?.toLocaleString('en-IN') || 'N/A' %></td>
-  </tr>
-  <% }) %>
-</tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
+                              <td><%= staff.todayStatus %></td>
+                              <td>
+                                <%= a?.entryTime?.toLocaleString('en-IN') ||
+                                'N/A' %>
+                              </td>
+                              <td>
+                                <%= a?.breakOutTime?.toLocaleString('en-IN') ||
+                                'N/A' %>
+                              </td>
+                              <td>
+                                <%= a?.breakReturnTime?.toLocaleString('en-IN')
+                                || 'N/A' %>
+                              </td>
+                              <td>
+                                <%= a?.dutyOffTime?.toLocaleString('en-IN') ||
+                                'N/A' %>
+                              </td>
+                            </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-             
             </div>
           </div>
         </div>
       </div>
     </div>
-    
 
-   
-<%- include('./ui/footer') %>
+    <%- include('./ui/footer') %>
+  </body>
+</html>

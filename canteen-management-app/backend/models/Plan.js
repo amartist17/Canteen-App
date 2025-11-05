@@ -14,6 +14,11 @@ const PlanSchema = new mongoose.Schema({
     ref: 'Student',
     required: true,
   },
+  rfidCard: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   planName: {
     type: String,
     required: true,
@@ -103,6 +108,7 @@ PlanSchema.statics.generateAndAssignPlan = async function (student, predefinedPl
 
   const newPlan = await this.create({
     student: student._id,
+    rfidCard: student.rfidCard,
     planName: predefinedPlan.planName,
     planType: predefinedPlan.planType,
     thaliType: predefinedPlan.thaliType,

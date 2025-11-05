@@ -125,6 +125,7 @@
     <script src="/js/app-style-switcher.js"></script>
     <script src="/js/sidebarmenu.js"></script>
     <script src="/js/custom.js"></script>
+    <script src="/js/contact.js"></script>
     <script src="/libs/prismjs/prism.js"></script>
 
     <!--  current page js files -->
@@ -397,9 +398,10 @@
     });
   });
 </script>
+
      <!-- Add Plan -->
-      <script>
-        $(document).ready(function () {
+<script>
+$(document).ready(function () {
   $('#planForm').on('submit', function (e) {
     e.preventDefault(); // Prevent default form submission
 
@@ -439,7 +441,79 @@
     });
   });
 });
-      </script>
+
+
+</script>
+
+<!-- Check Remaining Meals -->
+ <script>
+$(document).ready(function () {
+  $('#rfidCheckForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const rfid = $('#rfid').val().trim();
+    if (!rfid) {
+      $('#rfidResult').html(`
+        <div class="alert alert-danger" role="alert">
+          Please enter RFID.
+        </div>
+      `);
+      return;
+    }
+
+    // Show loader
+    $('#rfidResult').html(`
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="spinner-border spinner-border-sm me-2 text-info" role="status"></div>
+        Checking...
+      </div>
+    `);
+
+    $.ajax({
+      url: `/plans/meals-left/${encodeURIComponent(rfid)}`,
+      type: 'GET',
+      dataType: 'text', // Expect text from server (could be a number or error string)
+      success: function (response) {
+        const value = Number(response);
+
+        if (!isNaN(value)) {
+          // ✅ numeric result (remaining meals)
+          $('#rfidResult').html(`
+            <div class="alert alert-${value > 0 ? 'success' : 'secondary'} text-center" role="alert">
+              <strong>${value}</strong> meal${value === 1 ? '' : 's'} left
+            </div>
+          `);
+        } else {
+          // ❌ error message from server
+          $('#rfidResult').html(`
+            <div class="alert alert-danger" role="alert">
+              ${response}
+            </div>
+          `);
+        }
+
+        // Auto clear after few seconds
+        setTimeout(() => {
+          $('#rfidResult').empty();
+        }, 4000);
+      },
+      error: function (xhr) {
+        const message = xhr.responseText || 'Server error. Please try again.';
+        $('#rfidResult').html(`
+          <div class="alert alert-danger" role="alert">
+            ${message}
+          </div>
+        `);
+
+        setTimeout(() => {
+          $('#rfidResult').empty();
+        }, 4000);
+      },
+    });
+  });
+});
+</script>
+
 
 <!-- RFID Update Script -->
 <script>

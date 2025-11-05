@@ -58,73 +58,78 @@
                     </div>
 
                     <div class="table-responsive" style="overflow-x:auto;">
-                      <table id="zero_config" class="table border table-bordered text-nowrap" style="width:100%; overflow-x:scroll;">
-                        <thead>
-                          <tr>
-                            <th>Date</th>
-                            <th>Time (IST)</th>
-                            <th>Type</th>
-                            <th>RFID</th>
-                            <th>Name</th>
-                            <th>Duration</th>
-                            <th>Status</th>
-                            <th>Reason</th>
-                          </tr>
-                        </thead>
-                      <tbody>
-  <% if (Array.isArray(rows) && rows.length) { %>
-    <% rows.forEach(r => { 
-      const d = new Date(r.at);
-      // Normalize to IST for BOTH display and sort keys
-      const ist = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-
-      const dd = ist.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); // e.g., 30 Sept 2025
-      const tt = ist.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
-
-      // Sort keys
-      const sortDateMs = Date.UTC(ist.getFullYear(), ist.getMonth(), ist.getDate()); // midnight IST as UTC ms
-      const sortTimeMin = ist.getHours() * 60 + ist.getMinutes();                   // minutes since midnight
-    %>
-      <tr>
-        <!-- use data-order so DataTables sorts by the numeric key, not the text -->
-        <td data-order="<%= sortDateMs %>"><%= dd %></td>
-        <td data-order="<%= sortTimeMin %>"><%= tt %></td>
-        <td><span class="badge-pill bg-info-subtle text-dark"><%= r.type %></span></td>
-        <td class="font-mono"><%= r.rfid || '—' %></td>
-        <td><%= r.name || '—' %></td>
-        <td><%= r.duration || 'Outside Slots' %></td>
-        <td>
-          <% if (r.status === 'success') { %>
-            <span class="badge-pill bg-success-subtle text-success">success</span>
-          <% } else if (r.status === 'failure') { %>
-            <span class="badge-pill bg-danger-subtle text-danger">failure</span>
-          <% } else { %>
-            <span class="badge-pill bg-warning-subtle text-warning"><%= r.status || 'processing' %></span>
-          <% } %>
-        </td>
-        <td title="<%= r.reason || '' %>"><%= r.reason || '—' %></td>
-      </tr>
-    <% }) %>
-  <% } else { %>
+                     <table id="zero_config" class="table border table-bordered text-nowrap" style="width:100%; overflow-x:scroll;">
+  <thead>
     <tr>
-      <td colspan="8" class="text-center text-muted">No records</td>
+      <th>Date</th>
+      <th>Time (IST)</th>
+      <th>Type</th>
+      <th>Name</th>  <!-- RFID will appear under this -->
+      <th>Duration</th>
+      <th>Status</th>
+      <th>Reason</th>
     </tr>
-  <% } %>
-</tbody>
+  </thead>
 
-                        <tfoot>
-                          <tr>
-                            <th>Date</th>
-                            <th>Time (IST)</th>
-                            <th>Type</th>
-                            <th>RFID</th>
-                            <th>Name</th>
-                            <th>Duration</th>
-                            <th>Status</th>
-                            <th>Reason</th>
-                          </tr>
-                        </tfoot>
-                      </table>
+  <tbody>
+    <% if (Array.isArray(rows) && rows.length) { %>
+      <% rows.forEach(r => { 
+        const d = new Date(r.at);
+        const ist = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+        const dd = ist.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+        const tt = ist.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true });
+
+        const sortDateMs = Date.UTC(ist.getFullYear(), ist.getMonth(), ist.getDate());
+        const sortTimeMin = ist.getHours() * 60 + ist.getMinutes();
+      %>
+        <tr>
+          <td data-order="<%= sortDateMs %>"><%= dd %></td>
+          <td data-order="<%= sortTimeMin %>"><%= tt %></td>
+          <td><span class="badge-pill bg-info-subtle text-dark"><%= r.type %></span></td>
+
+          <td>
+            <div><%= r.name || '—' %></div>
+            <% if (r.rfid) { %>
+              <div
+                style="font-size:12px; opacity:0.8; line-height:1.1; margin-top:2px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+                <%= r.rfid %>
+              </div>
+            <% } %>
+          </td>
+
+          <td><%= r.duration || 'Outside Slots' %></td>
+          <td>
+            <% if (r.status === 'success') { %>
+              <span class="badge-pill bg-success-subtle text-success">success</span>
+            <% } else if (r.status === 'failure') { %>
+              <span class="badge-pill bg-danger-subtle text-danger">failure</span>
+            <% } else { %>
+              <span class="badge-pill bg-warning-subtle text-warning"><%= r.status || 'processing' %></span>
+            <% } %>
+          </td>
+          <td title="<%= r.reason || '' %>"><%= r.reason || '—' %></td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr>
+        <td colspan="7" class="text-center text-muted">No records</td>
+      </tr>
+    <% } %>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <th>Date</th>
+      <th>Time (IST)</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Duration</th>
+      <th>Status</th>
+      <th>Reason</th>
+    </tr>
+  </tfoot>
+</table>
+
                     </div>
 
                     <!-- Optional legend -->

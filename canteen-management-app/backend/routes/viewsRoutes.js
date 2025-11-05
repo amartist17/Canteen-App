@@ -1,6 +1,7 @@
 const express = require('express');
 const PredefinedPlans = require('../models/PredefinedPlans');
 const Student = require('../models/Student');
+const Plan = require('../models/Plan');
 const Ledger = require('../models/Ledger');
 const router = express.Router();
 const { DateTime } = require('luxon');
@@ -97,43 +98,28 @@ router.get('/staff-attendance', (req, res, next) => {
 
 const Staff = require('../models/Staff');
 
-// // GET /staff/attendance-table
-// router.get('/total-staff', async (req, res) => {
-//   try {
-//     const staffList = await Staff.find().lean();
-//     res.render('dashboard/total-staff', { staffList }); // your EJS view name
-//   } catch (err) {
-//     res.status(500).send('Server Error');
-//   }
-// });
-
 // GET /total-staff
 router.get('/total-staff', async (req, res) => {
   try {
     const staffList = await Staff.find().lean();
 
-    // Build today's window in IST, convert to UTC for Mongo dates
-    const IST_MIN = 330; // +05:30 in minutes
-    const now = new Date();
-    const istNow = new Date(now.getTime() + IST_MIN * 60_000);
+    // "Today" as a calendar date in IST (YYYY-MM-DD)
+    const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    const isTodayIST = (d) =>
+      !!d &&
+      new Date(d).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) === todayIST;
 
-    const istStart = new Date(istNow); istStart.setHours(0,0,0,0);
-    const istEnd   = new Date(istNow); istEnd.setHours(23,59,59,999);
-
-    const startUTC = new Date(istStart.getTime() - IST_MIN * 60_000);
-    const endUTC   = new Date(istEnd.getTime()   - IST_MIN * 60_000);
-
-    // helper: first timestamp present on a record
     const pickTime = (a) => a?.entryTime || a?.date || a?.createdAt || null;
 
     for (const s of staffList) {
       const rec = (s.attendance || [])
-        .slice() // do not mutate
-        .reverse() // check newest first
-        .find(a => {
-          const t = pickTime(a);
-          return t && (new Date(t) >= startUTC) && (new Date(t) <= endUTC);
-        });
+        .slice().reverse()
+        .find(a =>
+          isTodayIST(pickTime(a)) ||
+          isTodayIST(a.breakOutTime) ||
+          isTodayIST(a.breakReturnTime) ||
+          isTodayIST(a.dutyOffTime)
+        );
 
       s.todayAttendance = rec || null;
       s.todayStatus = rec?.status || 'Absent';
@@ -187,9 +173,6 @@ router.get('/students/logs', async (req, res, next) => {
   }
 });
 
-module.exports = router;
-
-
 
 
 
@@ -219,6 +202,42 @@ console.log(listUsbPrinters());
     next(err);
   }
 });
+
+// Putting RFID in Plans of Student
+// router.get('/updateRFIDs', async (req, res) => {
+//   try {
+//     // Fetch all plans (or limit if you have many)
+//     const plans = await Plan.find().populate('student', 'rfidCard name');
+//     let updatedCount = 0;
+//     let skippedCount = 0;
+//     console.log(plans[0])
+//     for (const plan of plans) {
+//       if (plan.student && plan.student.rfidCard) {
+//         // Only update if RFID missing or different
+//         if (!plan.rfidCard ) {
+//           plan.rfidCard = plan.student.rfidCard;
+//           await plan.save();
+//           updatedCount++;
+//         } else {
+//           skippedCount++;
+//         }
+//       } else {
+//         skippedCount++;
+//       }
+//     }
+
+//     res.json({
+//       ok: true,
+//       message: 'RFID fields synced successfully',
+//       updated: updatedCount,
+//       skipped: skippedCount,
+//       total: plans.length,
+//     });
+//   } catch (error) {
+//     console.error('Error updating RFID fields:', error);
+//     res.status(500).json({ ok: false, message: 'Server error while updating RFID' });
+//   }
+// });
 
 
 module.exports = router;
